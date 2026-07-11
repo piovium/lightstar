@@ -10,6 +10,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@octokit/webhooks": "^14.2.0"
+    "@octokit/webhooks": "^14.2.0",
+    "p-queue": "^9.3.1"
   }
 }
