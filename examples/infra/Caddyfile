@@ -1,0 +1,17 @@
+{
+	metrics {
+		per_host
+	}
+}
+
+:2020 {
+	metrics
+}
+
+lightstar.piovium.org {
+	reverse_proxy host.docker.internal:3000
+}
+
+grafana.piovium.org {
+	reverse_proxy grafana:3000
+}
