@@ -1,0 +1,25 @@
+[tools]
+bun = "latest"
+gh = "latest"
+pitchfork = "latest"
+
+[env]
+_.file = ".env"
+
+[tasks.preinit]
+run = [
+  "gh auth setup-git",
+  "git clone ${INFRA_REPO_CLONE_URL} stars/infra",
+  "pitchfork start lightstar",
+]
+
+[tasks.init]
+run = [
+  "docker compose up --detach",
+  "docker compose cp Caddyfile caddy:/etc/caddy",
+  "docker compose exec --workdir /etc/caddy caddy caddy reload",
+  "docker compose cp prometheus.yml prometheus:/etc/prometheus",
+  "docker compose kill --signal SIGHUP prometheus",
+]
+depends = "preinit"
+dir = "stars/infra"

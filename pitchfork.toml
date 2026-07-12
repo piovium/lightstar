@@ -1,0 +1,4 @@
+[daemons.lightstar]
+run = "bun index.ts"
+retry = true
+mise = true
