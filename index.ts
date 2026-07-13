@@ -29,16 +29,13 @@ webhooks.on("push", async ({ payload }) => {
       const compose = YAML.parse(composeText) as any;
       const composeWithNetwork = {
         ...compose,
-        networks: { default: { external: true, name: "infra" } },
+        networks: { default: { external: true, name: process.env.INFRA_REPO_NAME! } },
       };
       await composeFile.write(YAML.stringify(composeWithNetwork, null, 2));
 
       const cwd = `stars/${name}`;
-      if (name === "infra") {
-        await $`docker compose cp Caddyfile caddy:/etc/caddy`.cwd(cwd).nothrow();
-        await $`docker compose exec --workdir /etc/caddy caddy caddy reload`.cwd(cwd).nothrow();
-        await $`docker compose cp prometheus.yml prometheus:/etc/prometheus`.cwd(cwd).nothrow();
-        await $`docker compose kill --signal SIGHUP prometheus`.cwd(cwd).nothrow();
+      if (name === process.env.INFRA_REPO_NAME!) {
+        await $`mise run load`.cwd(cwd).nothrow();
       } else {
         await $`docker compose up --build --detach`.cwd(cwd);
       }

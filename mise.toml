@@ -6,14 +6,15 @@ pitchfork = "latest"
 [env]
 _.file = ".env"
 
-[tasks.preinit]
+[tasks.init]
 run = [
   "gh auth setup-git",
-  "git clone ${INFRA_REPO_CLONE_URL} stars/infra",
+  "git clone ${INFRA_REPO_CLONE_URL} stars/${INFRA_REPO_NAME}",
   "pitchfork start lightstar",
+  "mise run load",
 ]
 
-[tasks.init]
+[tasks.load]
 run = [
   "docker compose up --detach",
   "docker compose cp Caddyfile caddy:/etc/caddy",
@@ -21,5 +22,4 @@ run = [
   "docker compose cp prometheus.yml prometheus:/etc/prometheus",
   "docker compose kill --signal SIGHUP prometheus",
 ]
-depends = "preinit"
-dir = "stars/infra"
+dir = "stars/{{ env.INFRA_REPO_NAME }}"
