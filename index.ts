@@ -22,7 +22,7 @@ webhooks.on("push", async ({ payload }) => {
       console.log({ clone_url });
 
       await $`rm -rf ${name}`.cwd("stars");
-      await $`git clone --depth 1 ${clone_url}`.cwd("stars");
+      await $`git clone --depth 1 --recurse-submodules ${clone_url}`.cwd("stars");
 
       const composeFile = file(`stars/${name}/compose.yaml`);
       const composeText = await composeFile.text();
